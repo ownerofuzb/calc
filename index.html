@@ -1,256 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculator</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="calculator" class="calculator">
-    <div class="result"><p></p></div>
-    
-    <span class="clear grey">AC</span>
-    <span class="grey">+/-</span>
-    <span class="grey">%</span>
-    <span class="operator">÷</span>
-  
-    <span>7</span>
-    <span>8</span>
-    <span>9</span>
-    <span class="operator">x</span>
-    
-    <span>4</span>
-    <span>5</span>
-    <span>6</span>
-    <span class="operator">-</span>
-    
-    <span>1</span>
-    <span>2</span>
-    <span>3</span>
-    <span class="operator">+</span>
-    
-    <span class="double">0</span>
-    <span>.</span>
-    <span class="operator">=</span>
-    
-  </div>
-  <style>
-    @import url(https://fonts.googleapis.com/css?family=Roboto:100);
-html {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-*, *:before, *:after {
-  -webkit-box-sizing: inherit;
-  -moz-box-sizing: inherit;
-  box-sizing: inherit;
-}
-html {
-  font-family: 'Roboto';
-  font-weight: 100;
-}
-body {
-  display: flex;
-  justify-content: center;
-  margin-top: 1em;
-  font-size: 2em;
-  background-color: #bbb;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-  
-}
-.calculator {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  width: 50vh;
-  height: 80vh;
-  box-shadow: 0px 3px 10px 3px #aaa;
-  border-right: 0.01em solid #333;
-  border-bottom: 0.01em solid #333;
-}
-.result {
-    width: 100%;
-    background-color: #000;
-    min-height: 4em; 
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 1em;
-  }
-  .result > p {
-    font-size: 3em; 
-    padding: 0;
-    margin: 0;
-  }
-span {
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-  width: 25%;
-  background-color: #ccc;
-  line-height: 2em;
-  border-top: 0.01em solid #333;
-  border-left: 0.01em solid #333;
-}
-.operator {
-  background-color: #FF9500;
-  color: white;
-}
-.double {
-  width: 50%;
-}
-.grey {
-  background-color: #aaa;
-}
-.clicked {
-  background-color: darken(orange, 10%);
-}
-  </style>
-  <script>
-    window.onload = function() {
-  var buttons = document.getElementsByTagName('span'), 
-    result = document.querySelectorAll('.result p')[0], 
-    clear = document.getElementsByClassName('clear')[0], 
-    equation = [], 
-    operator = false; 
+    <main>
+        <div class="container">
+            <div class="panel">
+                <p class="result">0</p>
+            </div>
+            
+            <table>
+                <tr>
+                    <td><button id="ac" class="btn especial">AC</button></td>
+                    <td><button id="sign" class="btn especial">+/-</button></td>
+                    <td><button id="percentage" class="btn especial">%</button></td>
+                    <td><button id="division" class="btn operator">/</button></td>
+                </tr>
+                
+                <tr>
+                    <td><button id="seven" class="btn number">7</button></td>
+                    <td><button id="eight" class="btn number">8</button></td>
+                    <td><button id="nine" class="btn number">9</button></td>
+                    <td><button id="multiplication" class="btn operator">x</button></td>
+                </tr>    
+                
+                <tr>
+                    <td><button id="four" class="btn number">4</button></td>
+                    <td><button id="five" class="btn number">5</button></td>
+                    <td><button id="six" class="btn number">6</button></td>
+                    <td><button id="subtraction" class="btn operator">-</button></td>
+                </tr>  
+                
+                <tr>
+                    <td><button id="one" class="btn number">1</button></td>
+                    <td><button id="two" class="btn number">2</button></td>
+                    <td><button id="three" class="btn number">3</button></td>
+                    <td><button id="addition" class="btn operator">+</button></td>
+                </tr>  
 
-  for (var i = 0; i < buttons.length; i += 1) { 
-    if (buttons[i].innerHTML === '=') {
-      buttons[i].addEventListener("click", calculate(i));
-    } else if (buttons[i].innerHTML === '+/-') {
-      buttons[i].addEventListener("click", invert(i));
-    } else if (buttons[i].innerHTML === '%') {
-      buttons[i].addEventListener("click", percent(i));
-    } else if (buttons[i].innerHTML === 'AC') {
-      equation = [];
-    } else {
-      buttons[i].addEventListener("click", addValue(i));
-    }
-  }
-  
-  clear.onclick = function() {
-      result.innerHTML = '';
-      equation = [];
-      operator = false;
-    }
- 
-  function addValue(i) {
-    return function() {
-      if (buttons[i].innerHTML === '÷') {
-        clicked(this);
-        ifOperatorThanSwap('/');
-      } else if (buttons[i].innerHTML === 'x') {
-        clicked(this);
-        ifOperatorThanSwap('*');
-      } else if (buttons[i].innerHTML === '+') {
-        clicked(this);
-        ifOperatorThanSwap('+');
-      } else if (buttons[i].innerHTML === '-') {
-        clicked(this);
-        ifOperatorThanSwap('-');
-      } else {
-        removeClicked();
-        if (checkIfNum(equation[equation.length - 1])) {
-          equation = [];
-          equation.push(buttons[i].innerHTML);
-          operator = true;
-        } else {
-          equation.push(buttons[i].innerHTML);
-        }
-        if (operator) {
-          result.innerHTML = buttons[i].innerHTML;
-        } else {
-          result.innerHTML += buttons[i].innerHTML;
-        }
-        operator = false;
-      }
-    };
-  }
-
-  function clicked(i) {
-    removeClicked(i);
-    i.classList.add('clicked');
-  }
-
-  function removeClicked(i) {
-    var elems = document.querySelectorAll(".clicked");
-    [].forEach.call(elems, function(el) {
-      el.classList.remove("clicked");
-    });
-  }
-
-  function calculate(i) {
-    return function() {
-      if (equation.length == 0) { 
-        return;
-      } else {
-        var answer = eval(equation.join(''));
-        if (answer % 1 === 0) { 
-          result.innerHTML = answer;
-        } else { 
-          result.innerHTML = answer.toFixed(4);
-        }
-        equation = [];
-        equation.push(answer);
-        operator = false;
-      }
-    };
-  }
-
-  function invert(i) {
-    return function() {
-      if (equation.length == 0) {
-        return;
-      } else {
-        var number = result.innerHTML; 
-        popNumberOfDigits(number); 
-        var invert = number * -1; 
-        equation.push(invert); 
-        result.innerHTML = invert; 
-      }
-    }
-  }
-
-  function percent(i) {
-    return function() {
-      var number = result.innerHTML; 
-      popNumberOfDigits(number); 
-      var percent = number * 0.01; 
-      equation.push(percent); 
-      result.innerHTML = percent.toFixed(2); 
-    }
-  }
- 
-  function ifOperatorThanSwap(str) {
-    if (!operator) {
-      equation.push(str);
-      operator = true;
-    } else {
-      equation.pop();
-      equation.push(str);
-    }
-  }
-
-  function checkIfNum(v) {
-    if (typeof v == 'string') {
-      return false;
-    } else if (typeof v == 'number') {
-      return true;
-    }
-  }
-
-  function popNumberOfDigits(number) {
-    var arr = number.split(''); 
-    for (i = 0; i < arr.length; i++) { 
-      equation.pop();
-    }
-  }
-};
-
-  </script>
+                <tr>
+                    <td colspan="2"><button id="zero" class="btn number"><p id="zero">0</p></button></td>
+                    <td><button id="point" class="btn decimal">.</button></td>
+                    <td><button id="equal" class="btn operator">=</button></td>
+                </tr>  
+            </table>
+        </div>
+    </main>
+    <!-- JQUERY-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- JS -->
+    <script src="js/index.js"></script>
 </body>
 </html>
